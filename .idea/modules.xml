@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/AOLSampleSuperAuction.iml" filepath="$PROJECT_DIR$/AOLSampleSuperAuction.iml" />
+      <module fileurl="file://$PROJECT_DIR$/android-ad-sdk/android-ad-sdk.iml" filepath="$PROJECT_DIR$/android-ad-sdk/android-ad-sdk.iml" />
+      <module fileurl="file://$PROJECT_DIR$/android-google-ad-mm-adapter-1.3.0-c8332522/android-google-ad-mm-adapter-1.3.0-c8332522.iml" filepath="$PROJECT_DIR$/android-google-ad-mm-adapter-1.3.0-c8332522/android-google-ad-mm-adapter-1.3.0-c8332522.iml" />
+      <module fileurl="file://$PROJECT_DIR$/android-mm-mopub-adapter/android-mm-mopub-adapter.iml" filepath="$PROJECT_DIR$/android-mm-mopub-adapter/android-mm-mopub-adapter.iml" />
+      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+    </modules>
+  </component>
+</project>

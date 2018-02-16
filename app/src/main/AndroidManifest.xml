@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+          package="com.malcomjones.aolsample">
+
+    <!-- Permissions for AOL SDK -->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+
+    <uses-permission-sdk-23 android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+
+    <uses-permission
+        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        android:maxSdkVersion="22"/>
+    <uses-permission android:name="android.permission.WRITE_CALENDAR"/>
+    <uses-permission android:name="android.permission.NFC"/>
+    <uses-permission android:name="android.permission.BLUETOOTH"/>
+    <uses-permission android:name="android.permission.VIBRATE"/>
+    <uses-permission android:name="android.permission.RECORD_AUDIO"/>
+
+    <application
+        android:name=".AOLSample"
+        android:allowBackup="true"
+        android:icon="@mipmap/im_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/im_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+        <activity android:name=".MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity>
+        <activity android:name=".BannerActivity">
+        </activity>
+        <activity android:name=".MRECActivity">
+        </activity>
+        <activity android:name=".InterstitialActivity">
+        </activity>
+        <activity android:name=".NativeActivity">
+        </activity>
+        <activity android:name=".MoPubBannerActivity">
+        </activity>
+        <activity android:name=".DFPBannerActivity">
+        </activity>
+        <activity android:name=".SuperAuctionBannerMoPubActivity">
+        </activity>
+        <activity android:name=".SuperAuctionBannerDFPActivity">
+        </activity>
+        <activity android:name=".SuperAuctionBannerActivity">
+        </activity>
+        <activity android:name=".SuperAuctionMRECMoPubActivity">
+        </activity>
+
+        <provider
+            android:name="com.millennialmedia.internal.utils.MediaContentProvider"
+            android:authorities="${applicationId}.MediaContentProvider"
+            android:exported="false"
+            android:grantUriPermissions="true"/>
+
+    </application>
+
+</manifest>

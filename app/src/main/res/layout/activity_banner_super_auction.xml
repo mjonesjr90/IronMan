@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.malcomjones.aolsample.SuperAuctionBannerActivity">
+
+    <LinearLayout
+        android:id="@+id/banner_container_sa"
+        android:orientation="horizontal"
+        android:layout_width="320dp"
+        android:layout_height="50dp"
+        android:layout_centerHorizontal="true"/>
+
+    <Button
+        android:id="@+id/load_sa_banner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:text="Load"
+        android:onClick="loadAdSA"/>
+    <Button
+        android:id="@+id/reload_sa_banner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:text="I'll have another!"
+        android:onClick="loadAdSA"
+        android:layout_below="@id/load_sa_banner"/>
+
+</RelativeLayout>

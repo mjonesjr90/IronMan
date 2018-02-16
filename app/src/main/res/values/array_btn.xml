@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array
+        name="array_btns">
+        <item>Banner</item>
+        <item>Medium Rectangle</item>
+        <item>Interstitial</item>
+        <item>Native</item>
+        <item>MoPub Banner</item>
+        <item>DFP Banner</item>
+        <item>Super Auction Banner</item>
+        <item>Super Auction Banner - MoPub</item>
+        <item>Super Auction MREC - MoPub</item>
+        <item>Super Auction Banner - DFP</item>
+    </string-array>
+</resources>
