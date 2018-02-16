@@ -16,9 +16,9 @@ import com.millennialmedia.InlineAd;
 /**
  * This activity makes a super auction banner requestBid call to the ONE Mobile platform
  *
- * It passes this bid to MoPub as a keyword upon recieving a bid
+ * It passes this bid to DFP as a keyword upon receiving a bid
  *
- * If not bid is returned, a conventional MoPub call is made
+ * If not bid is returned, a conventional DFP call is made
  */
 
 public class SuperAuctionBannerDFPActivity extends Activity{
