@@ -2,7 +2,7 @@
                 xmlns:tools="http://schemas.android.com/tools"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                tools:context="com.malcomjones.aolsample.InterstitialActivity">
+                tools:context="com.malcomjones.ironman.InterstitialActivity">
 
     <Button
         android:id="@+id/load"

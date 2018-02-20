@@ -1,38 +1,92 @@
-package com.malcomjones.aolsample;
+package com.malcomjones.ironman;
 
+import android.app.Activity;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.millennialmedia.BidRequestErrorStatus;
+import com.millennialmedia.BidRequestListener;
 import com.millennialmedia.InlineAd;
 import com.millennialmedia.MMException;
 
 /**
- * This activity makes a conventional banner request to the ONE Mobile platform
+ * Instance of Super Auction without using MoPub
+ *
+ * This can be a base for publishers who have their own SSP
  */
+public class SuperAuctionBannerActivity extends Activity{
 
-public class BannerActivity extends AppCompatActivity {
-
-    private static final String TAG = "BannerActivity";
-    private static final String PLACEMENT_ID = "banner_homescreen";
+    private static final String TAG = "SABasicBannerActivity";
+    private static final String PLACEMENT_ID = "banner_homescreen_sa";
+    private View loadButton;
+    private View reloadButton;
     private InlineAd inlineAd;
+    private boolean hasBid = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_banner);
+        setContentView(R.layout.activity_banner_super_auction_mopub);
+        loadButton = findViewById(R.id.load_sa_banner);
+        reloadButton = findViewById(R.id.reload_sa_banner);
+        loadButton.setEnabled(false);
+        reloadButton.setEnabled(false);
 
-        final View adContainer = findViewById(R.id.banner_container);
+        requestBidPrice();
+    }
+
+    public void loadAdSA(View v){
+        requestBidPrice();
+        findViewById(R.id.load_sa_banner).setEnabled(false);
+    }
+
+    private void requestBidPrice(){
+        InlineAd.InlineAdMetadata inlineMetadata = new InlineAd.InlineAdMetadata();
+        inlineMetadata.setAdSize(InlineAd.AdSize.BANNER);
+        try{
+            InlineAd.requestBid(PLACEMENT_ID, inlineMetadata, new BidRequestListener() {
+                @Override
+                public void onRequestSucceeded(String bidPrice) {
+                    // set the bid price as a keyword on the 3rd party SDK ad request
+                    hasBid = true;
+                    Log.v(TAG, "Passed bid of: " + bidPrice);
+
+                    //Auction logic can be implemented here; call back to ONE Mobile SDK if we win
+                    Log.v(TAG,"Requesting banner for placement: " + PLACEMENT_ID);
+                    requestBanner(PLACEMENT_ID);
+                }
+                @Override
+                public void onRequestFailed(BidRequestErrorStatus errorStatus) {
+                    // error handling here - make a regular MoPub request
+                    hasBid = false;
+                    Log.v(TAG, "Failed bid");
+
+                    //Request another bid, or call and serve a bid from your SSP
+                    Log.v(TAG, "Requesting a new bid price");
+                    requestBidPrice();
+                }
+            });
+        } catch(MMException e) {
+            Log.e(TAG, "Error getting bid", e);
+            // abort loading ad
+        }
+
+
+        //inlineAd.request(inlineAdMetadata);
+    }
+
+    private void requestBanner(String placement){
+        final View adContainer = findViewById(R.id.banner_container_sa);
 
         try {
 
             // NOTE: The ad container argument passed to the createInstance call should be the
             // view container that the ad content will be injected into.
 
-            inlineAd = InlineAd.createInstance(PLACEMENT_ID, (ViewGroup) adContainer);
+            inlineAd = InlineAd.createInstance(placement, (ViewGroup) adContainer);
 
             inlineAd.setListener(new InlineAd.InlineListener() {
                 @Override
@@ -43,6 +97,8 @@ public class BannerActivity extends AppCompatActivity {
                         public void run() {
 
                             adContainer.setVisibility(View.VISIBLE);
+                            loadButton.setEnabled(false);
+                            reloadButton.setEnabled(true);
                         }
                     });
 
@@ -55,8 +111,8 @@ public class BannerActivity extends AppCompatActivity {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-
-                        Toast.makeText(BannerActivity.this, "Request Failed Called: " + errorStatus.toString(), Toast.LENGTH_LONG).show();
+                            loadButton.setEnabled(true);
+                            Toast.makeText(SuperAuctionBannerActivity.this, "Request Failed Called: " + errorStatus.toString(), Toast.LENGTH_LONG).show();
                         }
                     });
                     Log.i(TAG, errorStatus.toString());
@@ -127,5 +183,10 @@ public class BannerActivity extends AppCompatActivity {
 
             inlineAd.request(inlineAdMetadata);
         }
+    }
+
+    @Override
+    public void onDestroy(){
+        super.onDestroy();
     }
 }

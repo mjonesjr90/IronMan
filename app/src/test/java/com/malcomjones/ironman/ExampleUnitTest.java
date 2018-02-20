@@ -1,4 +1,4 @@
-package com.malcomjones.aolsample;
+package com.malcomjones.ironman;
 
 import org.junit.Test;
 
