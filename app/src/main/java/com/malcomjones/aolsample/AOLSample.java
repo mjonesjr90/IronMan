@@ -13,9 +13,15 @@ import com.millennialmedia.MMSDK;
 
 public class AOLSample extends Application {
     private static final String TAG = "SubclassActivity";
-//    private static final String SITE_ID = "2c9d2b5001616147a710481c205a00ea";
     private static final String SITE_ID = "studytime";
 
+    /**
+     * Initialize the SDK and set the SiteID
+     *
+     * appInfo can also call setCoppa(boolean c) and setMediator(String m)
+     *
+     * throw an exception if the initialization fails
+     */
     @Override
     public void onCreate() {
         super.onCreate();

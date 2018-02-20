@@ -25,7 +25,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         // Enable debug logging
-        MMLog.setLogLevel(Log.DEBUG);
+        MMLog.setLogLevel(Log.VERBOSE);
 
         // Set any known data about the user
         UserData userData = new UserData().setAge(27).setGender(UserData.Gender.MALE);
@@ -36,6 +36,9 @@ public class MainActivity extends AppCompatActivity {
             Log.e(TAG, "The MMSDK was not initialized");
         }
 
+
+        // Create a listview and populate using array_btns and simple_list_item_1
+        // Each item launches it's respective Activity
         ListView ad_type_list = (ListView) findViewById(R.id.lv);
 
         ad_type_list.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_list_item_1,
