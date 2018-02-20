@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
+import com.flurry.android.FlurryAgent;
 import com.millennialmedia.BidRequestErrorStatus;
 import com.millennialmedia.BidRequestListener;
 import com.millennialmedia.InlineAd;
@@ -37,6 +38,9 @@ public class SuperAuctionBannerMoPubActivity extends Activity implements BannerA
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_banner_super_auction_mopub);
+
+        FlurryAgent.logEvent("Requested a Super Auction MoPub Banner");
+
         loadButton = findViewById(R.id.load_sa_banner);
         reloadButton = findViewById(R.id.reload_sa_banner);
         loadButton.setEnabled(false);

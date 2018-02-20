@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.flurry.android.FlurryAgent;
 import com.millennialmedia.InlineAd;
 import com.millennialmedia.InlineAd.AdSize;
 import com.millennialmedia.MMException;
@@ -25,6 +26,8 @@ public class MRECActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mrec);
+
+        FlurryAgent.logEvent("Requested an MREC");
 
         final View adContainer = findViewById(R.id.mrec_container);
 

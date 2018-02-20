@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
 
+import com.flurry.android.FlurryAgent;
 import com.mopub.mobileads.MoPubErrorCode;
 import com.mopub.mobileads.MoPubView;
 import com.mopub.mobileads.MoPubView.BannerAdListener;
@@ -23,6 +24,9 @@ public class MoPubBannerActivity extends Activity implements BannerAdListener{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_banner_mopub);
+
+        FlurryAgent.logEvent("Requested a MoPub Banner");
+
         loadButton = findViewById(R.id.load_mopub_banner);
         loadButton.setEnabled(false);
 

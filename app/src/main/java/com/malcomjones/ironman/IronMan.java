@@ -3,6 +3,7 @@ package com.malcomjones.ironman;
 import android.app.Application;
 import android.util.Log;
 
+import com.flurry.android.FlurryAgent;
 import com.millennialmedia.AppInfo;
 import com.millennialmedia.MMException;
 import com.millennialmedia.MMSDK;
@@ -11,7 +12,7 @@ import com.millennialmedia.MMSDK;
  * Created by majones95 on 6/6/17.
  */
 
-public class AOLSample extends Application {
+public class IronMan extends Application {
     private static final String TAG = "SubclassActivity";
     private static final String SITE_ID = "studytime";
 
@@ -26,6 +27,7 @@ public class AOLSample extends Application {
     public void onCreate() {
         super.onCreate();
 
+        //Initialize the Millennial SDK
         try{
             MMSDK.initialize(this);
 
@@ -37,6 +39,14 @@ public class AOLSample extends Application {
         } catch (MMException e){
             Log.e(TAG, "SDK didn't initialize", e);
         }
+
+
+        // Initialize Flurry
+        new FlurryAgent.Builder()
+                .withLogEnabled(true)
+                .withCaptureUncaughtExceptions(true)
+                .withContinueSessionMillis(10)
+                .build(this, "23PWRR432MZ78CRF882Q");
 
     }
 }

@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.flurry.android.FlurryAgent;
 import com.millennialmedia.InlineAd;
 import com.millennialmedia.MMException;
 
@@ -24,6 +25,8 @@ public class BannerActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_banner);
+
+        FlurryAgent.logEvent("Requested a Banner");
 
         final View adContainer = findViewById(R.id.banner_container);
 

@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
+import com.flurry.android.FlurryAgent;
 import com.millennialmedia.InterstitialAd;
 import com.millennialmedia.MMException;
 
@@ -27,6 +28,9 @@ public class InterstitialActivity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_interstitial);
+
+        FlurryAgent.logEvent("Requested an Interstitial");
+
         final View loadButton = findViewById(R.id.load);
         final View showButton = findViewById(R.id.show);
 
