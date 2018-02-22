@@ -33,13 +33,12 @@ public class SuperAuctionBannerDFPActivity extends Activity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_banner_super_auction_dfp);
+        adContainer = findViewById(R.id.banner_container_dfp_sa);
+
 
         FlurryAgent.logEvent("Requested a Super Auction DFP Banner");
 
-        adContainer = findViewById(R.id.banner_container_dfp);
-
         try {
-
             Log.v(TAG, "REQUESTING BID");
             InlineAd.InlineAdMetadata inlineMetadata = new InlineAd.InlineAdMetadata();
             inlineMetadata.setAdSize(InlineAd.AdSize.BANNER);
@@ -51,6 +50,7 @@ public class SuperAuctionBannerDFPActivity extends Activity{
                     adRequest = new PublisherAdRequest.Builder()
                             .addCustomTargeting("sa", bidPrice)
                             .build();
+                    Log.v(TAG, "adRequest built");
                     // DFP LoadAd must run on the main UI thread
                     runOnUiThread(new Runnable() {
                         @Override
