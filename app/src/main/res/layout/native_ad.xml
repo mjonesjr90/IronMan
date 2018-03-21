@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+	android:id="@+id/native_ad"
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="wrap_content"
+	android:layout_height="wrap_content"
+	android:background="@android:color/darker_gray">
+
+	<RelativeLayout
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:background="@android:color/white">
+
+		<RelativeLayout
+			android:id="@+id/header"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_alignParentTop="true">
+
+			<TextView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_toRightOf="@+id/iconImage"
+				android:textSize="20dp"
+				android:tag="title_1"/>
+
+			<ImageView
+				android:id="@+id/iconImage"
+				android:layout_height="50dp"
+				android:layout_width="50dp"
+				android:tag="iconImage_1"/>
+
+			<TextView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_alignParentRight="true"
+				android:layout_alignParentTop="true"
+				android:tag="disclaimer_1"/>
+		</RelativeLayout>
+
+
+		<TextView
+			android:id="@+id/bodyText"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_below="@+id/header"
+			android:tag="body_1"/>
+
+		<ImageView
+			android:id="@+id/mainImage"
+			android:layout_below="@+id/bodyText"
+			android:layout_height="wrap_content"
+			android:layout_width="wrap_content"
+			android:tag="mainImage_1"/>
+
+		<RelativeLayout
+			android:id="@+id/footer"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_below="@+id/mainImage">
+
+			<Button
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_alignParentRight="true"
+				android:tag="callToAction_1"
+				android:textAllCaps="true"/>
+
+			<TextView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_alignParentLeft="true"
+				android:layout_centerVertical="true"
+				android:tag="rating_1"/>
+		</RelativeLayout>
+
+	</RelativeLayout>
+</FrameLayout>

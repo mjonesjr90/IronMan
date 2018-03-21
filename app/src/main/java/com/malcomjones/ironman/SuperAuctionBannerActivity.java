@@ -56,7 +56,7 @@ public class SuperAuctionBannerActivity extends Activity{
                 public void onRequestSucceeded(String bidPrice) {
                     // set the bid price as a keyword on the 3rd party SDK ad request
                     hasBid = true;
-                    Log.v(TAG, "Passed bid of: " + bidPrice);
+                    Log.d(TAG, "Passed bid of: " + bidPrice);
 
                     //Auction logic can be implemented here; call back to ONE Mobile SDK if we win
                     Log.v(TAG,"Requesting banner for placement: " + PLACEMENT_ID);

@@ -8,7 +8,6 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.millennialmedia.MMException;
 import com.millennialmedia.MMLog;
@@ -51,13 +50,14 @@ public class MainActivity extends AppCompatActivity {
                     case 0: startActivity(new Intent(MainActivity.this, BannerActivity.class)); break;
                     case 1: startActivity(new Intent(MainActivity.this, MRECActivity.class)); break;
                     case 2: startActivity(new Intent(MainActivity.this, InterstitialActivity.class)); break;
-                    case 3: Toast.makeText(MainActivity.this, "Native Coming Soon", Toast.LENGTH_SHORT).show(); break;
+                    case 3: startActivity(new Intent(MainActivity.this, NativeActivity.class)); break;
                     case 4: startActivity(new Intent(MainActivity.this, MoPubBannerActivity.class)); break;
                     case 5: startActivity(new Intent(MainActivity.this, DFPBannerActivity.class)); break;
                     case 6: startActivity(new Intent(MainActivity.this, SuperAuctionBannerActivity.class)); break;
-                    case 7: startActivity(new Intent(MainActivity.this, SuperAuctionBannerMoPubActivity.class)); break;
-                    case 8: startActivity(new Intent(MainActivity.this, SuperAuctionMRECMoPubActivity.class)); break;
-                    case 9: startActivity(new Intent(MainActivity.this, SuperAuctionBannerDFPActivity.class)); break;
+                    case 7: startActivity(new Intent(MainActivity.this, SuperAuctionInterstitialActivity.class)); break;
+                    case 8: startActivity(new Intent(MainActivity.this, SuperAuctionBannerMoPubActivity.class)); break;
+                    case 9: startActivity(new Intent(MainActivity.this, SuperAuctionMRECMoPubActivity.class)); break;
+                    case 10: startActivity(new Intent(MainActivity.this, SuperAuctionBannerDFPActivity.class)); break;
                 }
             }
         });

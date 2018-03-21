@@ -8,16 +8,20 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.flurry.android.FlurryAgent;
+import com.millennialmedia.BidRequestErrorStatus;
+import com.millennialmedia.BidRequestListener;
 import com.millennialmedia.InterstitialAd;
 import com.millennialmedia.MMException;
 
 /**
  * This activity makes a conventional interstitial request to the ONE Mobile platform
  */
-public class InterstitialActivity extends AppCompatActivity {
+public class SuperAuctionInterstitialActivity extends AppCompatActivity {
 
-    public static final String PLACEMENT_ID = "interstitial";
-    public static final String TAG = InterstitialActivity.class.getSimpleName();
+    public static final String PLACEMENT_ID = "interstitial_video";
+    public static final String TAG = SuperAuctionInterstitialActivity.class.getSimpleName();
+    private View loadButton;
+    private View showButton;
 
     //Interstitial Ad declared
     private InterstitialAd interstitialAd;
@@ -27,17 +31,50 @@ public class InterstitialActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_interstitial);
+        setContentView(R.layout.activity_interstitial_super_auction);
 
-        FlurryAgent.logEvent("Requested an Interstitial");
+        FlurryAgent.logEvent("Requested a Super Auction Interstitial");
 
-        final View loadButton = findViewById(R.id.load);
-        final View showButton = findViewById(R.id.show);
+        loadButton = findViewById(R.id.load);
+        showButton = findViewById(R.id.show);
+        loadButton.setEnabled(true);
         showButton.setEnabled(false);
+        requestBidPrice();
+    }
 
+    private void requestBidPrice(){
+        InterstitialAd.InterstitialAdMetadata interstitialAdMetadataMetadata = new InterstitialAd.InterstitialAdMetadata();
+        try{
+            InterstitialAd.requestBid(PLACEMENT_ID, interstitialAdMetadataMetadata, new BidRequestListener() {
+                @Override
+                public void onRequestSucceeded(String bidPrice) {
+                    // set the bid price as a keyword on the 3rd party SDK ad request
+                    Log.v(TAG, "Passed bid of: " + bidPrice);
+
+                    //Auction logic can be implemented here; call back to ONE Mobile SDK if we win
+                    Log.v(TAG,"Requesting interstitial for placement: " + PLACEMENT_ID);
+                    requestInterstitial(PLACEMENT_ID);
+                }
+                @Override
+                public void onRequestFailed(BidRequestErrorStatus errorStatus) {
+                    // error handling here - make a regular MoPub request
+                    Log.v(TAG, "Failed bid");
+
+                    //Request another bid, or call and serve a bid from your SSP
+                    Log.v(TAG, "Requesting a new bid price");
+                    requestBidPrice();
+                }
+            });
+        } catch(MMException e) {
+            Log.e(TAG, "Error getting bid", e);
+            // abort loading ad
+        }
+    }
+
+    private void requestInterstitial(String placement){
         try {
-            interstitialAd = InterstitialAd.createInstance(PLACEMENT_ID);
-
+            interstitialAd = InterstitialAd.createInstance(placement);
+            Log.v(TAG,"Creating an interstitial instance");
             interstitialAd.setListener(new InterstitialAd.InterstitialListener() {
                 @Override
                 public void onLoaded(InterstitialAd interstitialAd) {
@@ -46,7 +83,6 @@ public class InterstitialActivity extends AppCompatActivity {
                         @Override
                         public void run() {
                             Toast.makeText(getApplicationContext(), "Ad loaded.", Toast.LENGTH_SHORT).show();
-
                             loadButton.setEnabled(false);
                             showButton.setEnabled(true);
                         }
@@ -59,12 +95,10 @@ public class InterstitialActivity extends AppCompatActivity {
                 public void onLoadFailed(InterstitialAd interstitialAd,
                                          InterstitialAd.InterstitialErrorStatus errorStatus) {
 
-
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
                             Toast.makeText(getApplicationContext(), "Ad load failed.", Toast.LENGTH_SHORT).show();
-
                             loadButton.setEnabled(true);
                             showButton.setEnabled(false);
                         }
@@ -132,6 +166,8 @@ public class InterstitialActivity extends AppCompatActivity {
                 }
             });
 
+            loadButton.setEnabled(true);
+
         } catch (MMException e) {
             Log.e(TAG, "Error creating interstitial ad", e);
             // abort loading ad
@@ -139,11 +175,12 @@ public class InterstitialActivity extends AppCompatActivity {
     }
 
     public void loadAd(View v){
+//        requestBidPrice();
         if (interstitialAd != null) {
             interstitialAd.load(this, null);
             Log.i(TAG, "Interstitial loaded");
             findViewById(R.id.load).setEnabled(false);
-            //findViewById(R.id.show).setEnabled(true);
+            findViewById(R.id.show).setEnabled(true);
         }
     }
 

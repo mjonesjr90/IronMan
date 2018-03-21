@@ -52,6 +52,8 @@
         </activity>
         <activity android:name="com.malcomjones.ironman.SuperAuctionMRECMoPubActivity">
         </activity>
+        <activity android:name="com.malcomjones.ironman.SuperAuctionInterstitialActivity">
+        </activity>
 
         <provider
             android:name="com.millennialmedia.internal.utils.MediaContentProvider"
