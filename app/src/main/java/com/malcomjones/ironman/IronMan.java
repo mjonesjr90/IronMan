@@ -15,7 +15,7 @@ import com.millennialmedia.MMSDK;
 public class IronMan extends Application {
     private static final String TAG = "SubclassActivity";
     private static final String SITE_ID = "studytime";
-
+    private static final String FLURRY_API_KEY = "23PWRR432MZ78CRF882Q";
     /**
      * Initialize the SDK and set the SiteID
      *
@@ -46,7 +46,7 @@ public class IronMan extends Application {
                 .withLogEnabled(true)
                 .withCaptureUncaughtExceptions(true)
                 .withContinueSessionMillis(10)
-                .build(this, "23PWRR432MZ78CRF882Q");
+                .build(this, FLURRY_API_KEY);
 
     }
 }

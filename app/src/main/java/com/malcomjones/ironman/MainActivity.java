@@ -58,6 +58,7 @@ public class MainActivity extends AppCompatActivity {
                     case 8: startActivity(new Intent(MainActivity.this, SuperAuctionBannerMoPubActivity.class)); break;
                     case 9: startActivity(new Intent(MainActivity.this, SuperAuctionMRECMoPubActivity.class)); break;
                     case 10: startActivity(new Intent(MainActivity.this, SuperAuctionBannerDFPActivity.class)); break;
+                    case 11: startActivity(new Intent(MainActivity.this, FlurryNativeActivity.class)); break;
                 }
             }
         });

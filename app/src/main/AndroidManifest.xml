@@ -54,6 +54,8 @@
         </activity>
         <activity android:name="com.malcomjones.ironman.SuperAuctionInterstitialActivity">
         </activity>
+        <activity android:name="com.malcomjones.ironman.FlurryNativeActivity">
+        </activity>
 
         <provider
             android:name="com.millennialmedia.internal.utils.MediaContentProvider"
