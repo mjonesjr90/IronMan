@@ -25,7 +25,6 @@ dependencies {
     compile 'com.android.support.constraint:constraint-layout:1.1.0-beta4'
     testCompile 'junit:junit:4.12'
     compile 'com.google.android.gms:play-services:11.8.0'
-    compile project(':android-ad-sdk')
     compile('com.mopub:mopub-sdk:4.16.0@aar') {
         transitive = true
         exclude module: 'libAvid-mopub' // To exclude AVID
@@ -36,4 +35,5 @@ dependencies {
     implementation project(':android-google-ad-mm-adapter-1.3.0-c8332522')
     compile 'com.flurry.android:analytics:9.0.0@aar'
     compile 'com.flurry.android:ads:9.0.0@aar'
+    implementation project(':android-ad-sdk')
 }

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+          xmlns:tools="http://schemas.android.com/tools"
           package="com.malcomjones.ironman">
 
     <!-- Permissions for AOL SDK -->
@@ -55,6 +56,11 @@
         <activity android:name="com.malcomjones.ironman.SuperAuctionInterstitialActivity">
         </activity>
         <activity android:name="com.malcomjones.ironman.FlurryNativeActivity">
+        </activity>
+        <activity
+            android:name="com.millennialmedia.internal.MMActivity"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
+            tools:replace="android:theme" >
         </activity>
 
         <provider
