@@ -45,6 +45,8 @@
         </activity>
         <activity android:name="com.malcomjones.ironman.DFPBannerActivity">
         </activity>
+        <activity android:name="com.malcomjones.ironman.AdMobBannerActivity">
+        </activity>
         <activity android:name="com.malcomjones.ironman.SuperAuctionBannerMoPubActivity">
         </activity>
         <activity android:name="com.malcomjones.ironman.SuperAuctionBannerDFPActivity">

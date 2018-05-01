@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">IronMan</string>
+    <string name="gdpr_confirmation">Is this an EU request?</string>
+    <string name="eu_true">EU Request</string>
+    <string name="eu_false">Non-EU Request</string>
+    <string name="gdpr_consent">GDPR Consent</string>
 </resources>

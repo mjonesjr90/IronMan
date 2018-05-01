@@ -18,7 +18,7 @@ import com.mopub.mobileads.MoPubView.BannerAdListener;
 
 public class SuperAuctionMRECMoPubActivity extends Activity implements BannerAdListener{
 
-    private static final String ADUNIT_ID = "05578692429143438eefab671730329d";
+    private static final String ADUNIT_ID = "6d51be2de4c8484faf883020fddebdde";
     private static final String TAG = "MRECActivity";
     private static final String PLACEMENT_ID = "mrec_sa";
     private MoPubView moPubView;

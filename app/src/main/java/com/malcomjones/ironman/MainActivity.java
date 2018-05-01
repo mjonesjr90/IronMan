@@ -1,9 +1,14 @@
 package com.malcomjones.ironman;
 
+import android.app.DialogFragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.MenuItem.OnMenuItemClickListener;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -35,6 +40,8 @@ public class MainActivity extends AppCompatActivity {
             Log.e(TAG, "The MMSDK was not initialized");
         }
 
+        DialogFragment gdrp_dialog = new GDPRDialog();
+        gdrp_dialog.show(getFragmentManager(), "gdpr dialog");
 
         // Create a listview and populate using array_btns and simple_list_item_1
         // Each item launches it's respective Activity
@@ -53,14 +60,31 @@ public class MainActivity extends AppCompatActivity {
                     case 3: startActivity(new Intent(MainActivity.this, NativeActivity.class)); break;
                     case 4: startActivity(new Intent(MainActivity.this, MoPubBannerActivity.class)); break;
                     case 5: startActivity(new Intent(MainActivity.this, DFPBannerActivity.class)); break;
-                    case 6: startActivity(new Intent(MainActivity.this, SuperAuctionBannerActivity.class)); break;
-                    case 7: startActivity(new Intent(MainActivity.this, SuperAuctionInterstitialActivity.class)); break;
-                    case 8: startActivity(new Intent(MainActivity.this, SuperAuctionBannerMoPubActivity.class)); break;
-                    case 9: startActivity(new Intent(MainActivity.this, SuperAuctionMRECMoPubActivity.class)); break;
-                    case 10: startActivity(new Intent(MainActivity.this, SuperAuctionBannerDFPActivity.class)); break;
-                    case 11: startActivity(new Intent(MainActivity.this, FlurryNativeActivity.class)); break;
+                    case 6: startActivity(new Intent(MainActivity.this, AdMobBannerActivity.class)); break;
+                    case 7: startActivity(new Intent(MainActivity.this, SuperAuctionBannerActivity.class)); break;
+                    case 8: startActivity(new Intent(MainActivity.this, SuperAuctionInterstitialActivity.class)); break;
+                    case 9: startActivity(new Intent(MainActivity.this, SuperAuctionBannerMoPubActivity.class)); break;
+                    case 10: startActivity(new Intent(MainActivity.this, SuperAuctionMRECMoPubActivity.class)); break;
+                    case 11: startActivity(new Intent(MainActivity.this, SuperAuctionBannerDFPActivity.class)); break;
+                    case 12: startActivity(new Intent(MainActivity.this, FlurryNativeActivity.class)); break;
                 }
             }
         });
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        menu.add(R.string.gdpr_consent).setOnMenuItemClickListener(new OnMenuItemClickListener() {
+
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                DialogFragment gdrp_dialog = new GDPRDialog();
+                gdrp_dialog.show(getFragmentManager(), "gdpr dialog");
+                return true;
+            }
+        });
+        inflater.inflate(R.menu.ad_menu, menu);
+        return true;
     }
 }
