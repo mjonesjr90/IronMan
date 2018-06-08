@@ -17,6 +17,7 @@
     <uses-permission android:name="android.permission.BLUETOOTH"/>
     <uses-permission android:name="android.permission.VIBRATE"/>
     <uses-permission android:name="android.permission.RECORD_AUDIO"/>
+    <uses-permission android:name="android.permission.ACCESS_MOCK_LOCATION" />
 
     <application
         android:name="com.malcomjones.ironman.IronMan"
@@ -52,8 +53,6 @@
         <activity android:name="com.malcomjones.ironman.SuperAuctionBannerDFPActivity">
         </activity>
         <activity android:name="com.malcomjones.ironman.SuperAuctionBannerActivity">
-        </activity>
-        <activity android:name="com.malcomjones.ironman.SuperAuctionMRECActivity">
         </activity>
         <activity android:name="com.malcomjones.ironman.SuperAuctionMRECMoPubActivity">
         </activity>

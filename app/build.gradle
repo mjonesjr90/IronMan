@@ -5,7 +5,7 @@ android {
     buildToolsVersion '26.0.2'
     defaultConfig {
         applicationId "com.malcomjones.ironman"
-        minSdkVersion 19
+        minSdkVersion 25
         targetSdkVersion 26
         versionCode 1
         versionName "1.0"
@@ -25,7 +25,7 @@ dependencies {
     compile 'com.android.support.constraint:constraint-layout:1.1.0-beta4'
     testCompile 'junit:junit:4.12'
     compile 'com.google.android.gms:play-services:11.8.0'
-    compile('com.mopub:mopub-sdk:4.16.0@aar') {
+    implementation('com.mopub:mopub-sdk:5.0.0@aar') {
         transitive = true
         exclude module: 'libAvid-mopub' // To exclude AVID
         exclude module: 'moat-mobile-app-kit' // To exclude Moat
@@ -36,4 +36,5 @@ dependencies {
     compile 'com.flurry.android:analytics:9.0.0@aar'
     compile 'com.flurry.android:ads:9.0.0@aar'
     implementation project(':android-ad-sdk')
+    implementation project(':moat-mobile-app-kit-2.4.5')
 }

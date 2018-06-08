@@ -1,7 +1,11 @@
 <resources>
     <string name="app_name">IronMan</string>
-    <string name="gdpr_confirmation">Is this an EU request?</string>
+    <string name="gdpr_requirement">Is this an EU request?</string>
+    <string name="gdpr_confirmation">Do you give consent for personalized ads?</string>
     <string name="eu_true">EU Request</string>
     <string name="eu_false">Non-EU Request</string>
     <string name="gdpr_consent">GDPR Consent</string>
+    <string name="gdpr_consent_mopub">MoPub GDPR Consent</string>
+    <string name="consent_true">"I want cool ads"</string>
+    <string name="consent_false">"I want dumb ads"</string>
 </resources>

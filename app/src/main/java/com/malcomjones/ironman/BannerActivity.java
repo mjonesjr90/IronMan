@@ -121,7 +121,7 @@ public class BannerActivity extends AppCompatActivity {
     private void requestAd(){
         if (inlineAd != null) {
             // set a refresh rate of 30 seconds that will be applied after the first request
-            //inlineAd.setRefreshInterval(30000);
+            inlineAd.setRefreshInterval(20000);
 
             // The InlineAdMetadata instance is used to pass additional metadata to the server to
             // improve ad selection

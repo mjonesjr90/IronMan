@@ -30,7 +30,7 @@ public class SuperAuctionBannerActivity extends Activity{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_banner_super_auction_mopub);
+        setContentView(R.layout.activity_banner_super_auction);
 
         FlurryAgent.logEvent("Requested a Super Auction Banner");
 
@@ -70,7 +70,7 @@ public class SuperAuctionBannerActivity extends Activity{
 
                     //Request another bid, or call and serve a bid from your SSP
                     Log.v(TAG, "Requesting a new bid price");
-                    requestBidPrice();
+                    //requestBidPrice();
                 }
             });
         } catch(MMException e) {

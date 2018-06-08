@@ -1,10 +1,8 @@
 package com.mopub.mobileads;
 
 import android.app.Activity;
-import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.util.Log;
 
 import com.millennialmedia.AppInfo;
 import com.millennialmedia.CreativeInfo;
@@ -15,13 +13,19 @@ import com.millennialmedia.MMException;
 import com.millennialmedia.MMLog;
 import com.millennialmedia.MMSDK;
 import com.millennialmedia.XIncentivizedEventListener;
+import com.millennialmedia.internal.ActivityListenerManager;
 import com.mopub.common.BaseLifecycleListener;
 import com.mopub.common.LifecycleListener;
 import com.mopub.common.MoPub;
 import com.mopub.common.MoPubReward;
+import com.mopub.common.logging.MoPubLog;
+import com.mopub.common.privacy.ConsentStatus;
+import com.mopub.common.privacy.PersonalInfoManager;
 
 import java.util.Map;
 
+import static com.millennialmedia.MMSDK.setConsentData;
+import static com.millennialmedia.MMSDK.setConsentRequired;
 
 /**
  * Compatible with version 6.6 of the Millennial Media SDK.
@@ -31,20 +35,19 @@ import java.util.Map;
 final class MillennialRewardedVideo extends CustomEventRewardedVideo {
 
     private static final String TAG = MillennialRewardedVideo.class.getSimpleName();
-    public static final String DCN_KEY = "dcn";
-    public static final String APID_KEY = "adUnitID";
+    private static final String DCN_KEY = "dcn";
+    private static final String APID_KEY = "adUnitID";
 
     private InterstitialAd millennialInterstitial;
     private MillennialRewardedVideoListener millennialRewardedVideoListener = new MillennialRewardedVideoListener();
-    private Context context;
+    private Activity activity;
     private String apid = null;
 
     static {
-        Log.i(TAG, "Millennial Media Adapter Version: " + MillennialUtils.VERSION);
+        MoPubLog.d("Millennial Media Adapter Version: " + MillennialUtils.MEDIATOR_ID);
     }
 
-
-    public CreativeInfo getCreativeInfo() {
+    private CreativeInfo getCreativeInfo() {
 
         if (millennialInterstitial == null) {
             return null;
@@ -53,34 +56,26 @@ final class MillennialRewardedVideo extends CustomEventRewardedVideo {
         return millennialInterstitial.getCreativeInfo();
     }
 
-
     @Nullable
     @Override
     protected CustomEventRewardedVideoListener getVideoListenerForSdk() {
-
         return millennialRewardedVideoListener;
     }
-
 
     @Nullable
     @Override
     protected LifecycleListener getLifecycleListener() {
-
         return new BaseLifecycleListener();
     }
-
 
     @NonNull
     @Override
     protected String getAdNetworkId() {
-
         return (apid == null) ? "" : apid;
     }
 
-
     @Override
     protected void onInvalidate() {
-
         if (millennialInterstitial != null) {
             millennialInterstitial.destroy();
             millennialInterstitial = null;
@@ -88,31 +83,48 @@ final class MillennialRewardedVideo extends CustomEventRewardedVideo {
         }
     }
 
-
     @Override
     protected boolean checkAndInitializeSdk(@NonNull Activity launcherActivity,
-            @NonNull Map<String, Object> localExtras, @NonNull Map<String, String> serverExtras) throws Exception {
+                                            @NonNull Map<String, Object> localExtras, @NonNull Map<String, String> serverExtras) throws Exception {
+        try {
+            MMSDK.initialize(launcherActivity, ActivityListenerManager.LifecycleState.RESUMED);
 
-        if (!MillennialUtils.initSdk(launcherActivity)) {
-            Log.e(TAG, "MM SDK must be initialized with an Activity or Application context.");
+            PersonalInfoManager personalInfoManager = MoPub.getPersonalInformationManager();
+
+            if (personalInfoManager != null) {
+                try {
+                    Boolean gdprApplies = personalInfoManager.gdprApplies();
+
+                    // Set if GDPR applies / if consent is required
+                    if (gdprApplies != null) {
+                        setConsentRequired(gdprApplies);
+                    }
+                } catch (NullPointerException e) {
+                    MoPubLog.d("GDPR applicability cannot be determined.", e);
+                }
+
+                // Pass the user consent from the MoPub SDK to One by AOL as per GDPR
+                if (personalInfoManager.getPersonalInfoConsentStatus() == ConsentStatus.EXPLICIT_YES) {
+                    setConsentData("mopub", "1");
+                }
+            }
+        } catch (IllegalStateException e) {
+            MoPubLog.d("An exception occurred initializing the MM SDK", e);
 
             return false;
         }
-
         return true;
     }
 
-
     @Override
     protected void loadWithSdkInitialized(@NonNull Activity activity, @NonNull Map<String, Object> localExtras,
-            @NonNull Map<String, String> serverExtras) throws Exception {
-
-        this.context = activity.getApplicationContext();
+                                          @NonNull Map<String, String> serverExtras) throws Exception {
+        this.activity = activity;
         apid = serverExtras.get(APID_KEY);
         String dcn = serverExtras.get(DCN_KEY);
 
         if (MillennialUtils.isEmpty(apid)) {
-            Log.e(TAG, "Invalid extras-- Be sure you have a placement ID specified.");
+            MoPubLog.d("Invalid extras-- Be sure you have a placement ID specified.");
             MoPubRewardedVideoManager.onRewardedVideoLoadFailure(MillennialRewardedVideo.class, "",
                     MoPubErrorCode.ADAPTER_CONFIGURATION_ERROR);
 
@@ -120,10 +132,10 @@ final class MillennialRewardedVideo extends CustomEventRewardedVideo {
         }
 
         // Add DCN support
-        AppInfo ai = new AppInfo().setMediator("mopubsdk").setSiteId(dcn);
+        AppInfo ai = new AppInfo().setMediator(MillennialUtils.MEDIATOR_ID).setSiteId(dcn);
         try {
             MMSDK.setAppInfo(ai);
-			/* If MoPub gets location, so do we. */
+            /* If MoPub gets location, so do we. */
             MMSDK.setLocationEnabled(MoPub.getLocationAwareness() != MoPub.LocationAwareness.DISABLED);
 
             millennialInterstitial = InterstitialAd.createInstance(apid);
@@ -132,37 +144,32 @@ final class MillennialRewardedVideo extends CustomEventRewardedVideo {
             millennialInterstitial.load(activity, null);
 
         } catch (MMException e) {
-            Log.e(TAG, "An exception occurred loading an InterstitialAd", e);
+            MoPubLog.d("An exception occurred loading an InterstitialAd", e);
             MoPubRewardedVideoManager
                     .onRewardedVideoLoadFailure(MillennialRewardedVideo.class, apid, MoPubErrorCode.INTERNAL_ERROR);
         }
     }
 
-
     @Override
     protected boolean hasVideoAvailable() {
-
         return ((millennialInterstitial != null) && millennialInterstitial.isReady());
     }
 
-
     @Override
     protected void showVideo() {
-
         if ((millennialInterstitial != null) && millennialInterstitial.isReady()) {
             try {
-                millennialInterstitial.show(context);
+                millennialInterstitial.show(activity);
             } catch (MMException e) {
-                Log.e(TAG, "An exception occurred showing the MM SDK interstitial.", e);
+                MoPubLog.d("An exception occurred showing the MM SDK interstitial.", e);
                 MoPubRewardedVideoManager
                         .onRewardedVideoPlaybackError(MillennialRewardedVideo.class, millennialInterstitial.placementId,
                                 MoPubErrorCode.INTERNAL_ERROR);
             }
         } else {
-            Log.w(TAG, "showVideo called before MillennialInterstitial ad was loaded.");
+            MoPubLog.d("showVideo called before MillennialInterstitial ad was loaded.");
         }
     }
-
 
     class MillennialRewardedVideoListener
             implements InterstitialListener, XIncentivizedEventListener, CustomEventRewardedVideoListener {
@@ -174,48 +181,39 @@ final class MillennialRewardedVideo extends CustomEventRewardedVideo {
             // @formatter:off
             // https://github.com/mopub/mopub-android-sdk/blob/940eee70fe1980b4869d61cb5d668ccbab75c0ee/mopub-sdk/mopub-sdk-interstitial/src/main/java/com/mopub/mobileads/CustomEventInterstitial.java
             // @formatter:on
-            Log.d(TAG, "Millennial Rewarded Video Ad - Leaving application");
+            MoPubLog.d("Millennial Rewarded Video Ad - Leaving application");
         }
-
 
         @Override
         public void onClicked(final InterstitialAd interstitialAd) {
-
-            Log.d(TAG, "Millennial Rewarded Video Ad - Ad was clicked");
+            MoPubLog.d("Millennial Rewarded Video Ad - Ad was clicked");
             MillennialUtils.postOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-
                     MoPubRewardedVideoManager
                             .onRewardedVideoClicked(MillennialRewardedVideo.class, interstitialAd.placementId);
                 }
             });
         }
 
-
         @Override
         public void onClosed(final InterstitialAd interstitialAd) {
-
-            Log.d(TAG, "Millennial Rewarded Video Ad - Ad was closed");
+            MoPubLog.d("Millennial Rewarded Video Ad - Ad was closed");
             MillennialUtils.postOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-
                     MoPubRewardedVideoManager
                             .onRewardedVideoClosed(MillennialRewardedVideo.class, interstitialAd.placementId);
                 }
             });
         }
 
-
         @Override
         public void onExpired(final InterstitialAd interstitialAd) {
-
-            Log.d(TAG, "Millennial Rewarded Video Ad - Ad expired");
+            MoPubLog.d("Millennial Rewarded Video Ad - Ad expired");
             MillennialUtils.postOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-
                     MoPubRewardedVideoManager
                             .onRewardedVideoLoadFailure(MillennialRewardedVideo.class, interstitialAd.placementId,
                                     MoPubErrorCode.VIDEO_NOT_AVAILABLE);
@@ -223,12 +221,10 @@ final class MillennialRewardedVideo extends CustomEventRewardedVideo {
             });
         }
 
-
         @Override
         public void onLoadFailed(final InterstitialAd interstitialAd, InterstitialErrorStatus
                 interstitialErrorStatus) {
-
-            Log.d(TAG, "Millennial Rewarded Video Ad - load failed (" + interstitialErrorStatus.getErrorCode() + "): " +
+            MoPubLog.d("Millennial Rewarded Video Ad - load failed (" + interstitialErrorStatus.getErrorCode() + "): " +
                     interstitialErrorStatus.getDescription());
 
             final MoPubErrorCode moPubErrorCode;
@@ -244,7 +240,7 @@ final class MillennialRewardedVideo extends CustomEventRewardedVideo {
                                     .onRewardedVideoLoadSuccess(MillennialRewardedVideo.class, interstitialAd.placementId);
                         }
                     });
-                    Log.w(TAG, "Millennial Rewarded Video Ad - Attempted to load ads when ads are already loaded.");
+                    MoPubLog.d("Millennial Rewarded Video Ad - Attempted to load ads when ads are already loaded.");
                     return;
                 case InterstitialErrorStatus.EXPIRED:
                 case InterstitialErrorStatus.DISPLAY_FAILED:
@@ -267,7 +263,6 @@ final class MillennialRewardedVideo extends CustomEventRewardedVideo {
             MillennialUtils.postOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-
                     MoPubRewardedVideoManager
                             .onRewardedVideoLoadFailure(MillennialRewardedVideo.class, interstitialAd.placementId,
                                     moPubErrorCode);
@@ -275,40 +270,36 @@ final class MillennialRewardedVideo extends CustomEventRewardedVideo {
             });
         }
 
-
         @Override
         public void onLoaded(final InterstitialAd interstitialAd) {
 
-            Log.d(TAG, "Millennial Rewarded Video Ad - Ad loaded splendidly");
+            MoPubLog.d("Millennial Rewarded Video Ad - Ad loaded splendidly");
 
             CreativeInfo creativeInfo = getCreativeInfo();
 
             if ((creativeInfo != null) && MMLog.isDebugEnabled()) {
-                MMLog.d(TAG, "Rewarded Video Creative Info: " + creativeInfo);
+                MoPubLog.d("Rewarded Video Creative Info: " + creativeInfo);
             }
 
             MillennialUtils.postOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-
                     MoPubRewardedVideoManager
                             .onRewardedVideoLoadSuccess(MillennialRewardedVideo.class, interstitialAd.placementId);
                 }
             });
         }
 
-
         @Override
         public void onShowFailed(final InterstitialAd interstitialAd, InterstitialErrorStatus
                 interstitialErrorStatus) {
 
-            Log.e(TAG, "Millennial Rewarded Video Ad - Show failed (" + interstitialErrorStatus.getErrorCode() + "): " +
+            MoPubLog.d("Millennial Rewarded Video Ad - Show failed (" + interstitialErrorStatus.getErrorCode() + "): " +
                     interstitialErrorStatus.getDescription());
 
             MillennialUtils.postOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-
                     MoPubRewardedVideoManager
                             .onRewardedVideoPlaybackError(MillennialRewardedVideo.class, interstitialAd.placementId,
                                     MoPubErrorCode.VIDEO_PLAYBACK_ERROR);
@@ -316,30 +307,24 @@ final class MillennialRewardedVideo extends CustomEventRewardedVideo {
             });
         }
 
-
         @Override
         public void onShown(final InterstitialAd interstitialAd) {
-
-            Log.d(TAG, "Millennial Rewarded Video Ad - Ad shown");
+            MoPubLog.d("Millennial Rewarded Video Ad - Ad shown");
             MillennialUtils.postOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-
                     MoPubRewardedVideoManager
                             .onRewardedVideoStarted(MillennialRewardedVideo.class, interstitialAd.placementId);
                 }
             });
         }
 
-
         @Override
         public boolean onVideoComplete() {
-
-            Log.d(TAG, "Millennial Rewarded Video Ad - Video completed");
+            MoPubLog.d("Millennial Rewarded Video Ad - Video completed");
             MillennialUtils.postOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-
                     MoPubRewardedVideoManager
                             .onRewardedVideoCompleted(MillennialRewardedVideo.class, millennialInterstitial.placementId,
                                     MoPubReward.success(MoPubReward.NO_REWARD_LABEL, MoPubReward.DEFAULT_REWARD_AMOUNT));
@@ -348,11 +333,9 @@ final class MillennialRewardedVideo extends CustomEventRewardedVideo {
             return false;
         }
 
-
         @Override
         public boolean onCustomEvent(XIncentiveEvent xIncentiveEvent) {
-
-            Log.d(TAG, "Millennial Rewarded Video Ad - Custom event received: " + xIncentiveEvent.eventId + ", " +
+            MoPubLog.d("Millennial Rewarded Video Ad - Custom event received: " + xIncentiveEvent.eventId + ", " +
                     xIncentiveEvent.args);
 
             return false;

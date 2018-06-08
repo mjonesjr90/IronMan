@@ -2,6 +2,7 @@ package com.malcomjones.ironman;
 
 import android.app.DialogFragment;
 import android.content.Intent;
+import android.location.Location;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -22,6 +23,10 @@ import com.millennialmedia.UserData;
 public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "MainActivity";
+    private static final String PROVIDER = "flp";
+    private static final double LAT = 51.5287718;
+    private static final double LNG = -0.2430682;
+    private static final float ACCURACY = 3.0f;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,8 +45,17 @@ public class MainActivity extends AppCompatActivity {
             Log.e(TAG, "The MMSDK was not initialized");
         }
 
-        DialogFragment gdrp_dialog = new GDPRDialog();
-        gdrp_dialog.show(getFragmentManager(), "gdpr dialog");
+//        DialogFragment gdrp_dialog = new GDPRConsentRequiredDialog();
+//        gdrp_dialog.show(getFragmentManager(), "gdpr dialog");
+
+//        Location testLocation = createLocation(LAT, LNG, ACCURACY);
+//        FusedLocationProviderClient client = new FusedLocationProviderClient(this);
+//        try{
+//            client.setMockLocation(testLocation);
+//            Log.d(TAG, "Mock Location was passed");
+//        } catch (SecurityException e) {
+//            e.printStackTrace();
+//        }
 
         // Create a listview and populate using array_btns and simple_list_item_1
         // Each item launches it's respective Activity
@@ -62,11 +76,12 @@ public class MainActivity extends AppCompatActivity {
                     case 5: startActivity(new Intent(MainActivity.this, DFPBannerActivity.class)); break;
                     case 6: startActivity(new Intent(MainActivity.this, AdMobBannerActivity.class)); break;
                     case 7: startActivity(new Intent(MainActivity.this, SuperAuctionBannerActivity.class)); break;
-                    case 8: startActivity(new Intent(MainActivity.this, SuperAuctionInterstitialActivity.class)); break;
-                    case 9: startActivity(new Intent(MainActivity.this, SuperAuctionBannerMoPubActivity.class)); break;
-                    case 10: startActivity(new Intent(MainActivity.this, SuperAuctionMRECMoPubActivity.class)); break;
-                    case 11: startActivity(new Intent(MainActivity.this, SuperAuctionBannerDFPActivity.class)); break;
-                    case 12: startActivity(new Intent(MainActivity.this, FlurryNativeActivity.class)); break;
+                    case 8: startActivity(new Intent(MainActivity.this, SuperAuctionMRECActivity.class)); break;
+                    case 9: startActivity(new Intent(MainActivity.this, SuperAuctionInterstitialActivity.class)); break;
+                    case 10: startActivity(new Intent(MainActivity.this, SuperAuctionBannerMoPubActivity.class)); break;
+                    case 11: startActivity(new Intent(MainActivity.this, SuperAuctionMRECMoPubActivity.class)); break;
+                    case 12: startActivity(new Intent(MainActivity.this, SuperAuctionBannerDFPActivity.class)); break;
+                    case 13: startActivity(new Intent(MainActivity.this, FlurryNativeActivity.class)); break;
                 }
             }
         });
@@ -79,12 +94,21 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public boolean onMenuItemClick(MenuItem item) {
-                DialogFragment gdrp_dialog = new GDPRDialog();
+                DialogFragment gdrp_dialog = new GDPRConsentRequiredDialog();
                 gdrp_dialog.show(getFragmentManager(), "gdpr dialog");
                 return true;
             }
         });
         inflater.inflate(R.menu.ad_menu, menu);
         return true;
+    }
+
+    public Location createLocation(double lat, double lng, float accuracy) {
+        // Create a new Location
+        Location newLocation = new Location(PROVIDER);
+        newLocation.setLatitude(lat);
+        newLocation.setLongitude(lng);
+        newLocation.setAccuracy(accuracy);
+        return newLocation;
     }
 }
