@@ -11,6 +11,7 @@ import com.flurry.android.FlurryAgent;
 import com.millennialmedia.BidRequestErrorStatus;
 import com.millennialmedia.BidRequestListener;
 import com.millennialmedia.InlineAd;
+import com.millennialmedia.InlineAd.AdSize;
 import com.millennialmedia.MMException;
 
 /**
@@ -48,7 +49,7 @@ public class SuperAuctionMRECActivity extends Activity{
 
     private void requestBidPrice(){
         InlineAd.InlineAdMetadata inlineMetadata = new InlineAd.InlineAdMetadata();
-        inlineMetadata.setAdSize(InlineAd.AdSize.BANNER);
+        inlineMetadata.setAdSize(AdSize.MEDIUM_RECTANGLE);
         try{
             InlineAd.requestBid(PLACEMENT_ID, inlineMetadata, new BidRequestListener() {
                 @Override
@@ -180,7 +181,7 @@ public class SuperAuctionMRECActivity extends Activity{
             // The InlineAdMetadata instance is used to pass additional metadata to the server to
             // improve ad selection
             final InlineAd.InlineAdMetadata inlineAdMetadata = new InlineAd.InlineAdMetadata().
-                    setAdSize(InlineAd.AdSize.BANNER);
+                    setAdSize(AdSize.MEDIUM_RECTANGLE);
 
             inlineAd.request(inlineAdMetadata);
         }

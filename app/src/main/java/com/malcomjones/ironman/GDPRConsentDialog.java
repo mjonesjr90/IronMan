@@ -16,6 +16,7 @@ import com.millennialmedia.MMSDK;
 
 public class GDPRConsentDialog extends DialogFragment {
     private static final String TAG = "GDPR Consent Dialog";
+    private static final String TEST_CONSENT = "BOMgSHzOMgSHzAAABAENAC____ABkAAABA";
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstance) {
@@ -26,7 +27,7 @@ public class GDPRConsentDialog extends DialogFragment {
                 .setPositiveButton(R.string.consent_true, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         //Consent given
-                        MMSDK.setConsentData(MMSDK.IAB_CONSENT_KEY, "{Consent Data}");
+                        MMSDK.setConsentData(MMSDK.IAB_CONSENT_KEY, TEST_CONSENT);
                         Toast.makeText(getActivity(), "Consent was given", Toast.LENGTH_LONG).show();
                         Log.i(TAG, "Consent was given");
 
