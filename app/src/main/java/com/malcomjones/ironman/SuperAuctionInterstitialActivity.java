@@ -18,7 +18,7 @@ import com.millennialmedia.MMException;
  */
 public class SuperAuctionInterstitialActivity extends AppCompatActivity {
 
-    public static final String PLACEMENT_ID = "interstitial_video";
+    public static final String PLACEMENT_ID = "interstitial_static_sa";
     public static final String TAG = SuperAuctionInterstitialActivity.class.getSimpleName();
     private View loadButton;
     private View showButton;
