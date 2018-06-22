@@ -12,6 +12,9 @@ import com.millennialmedia.BidRequestListener;
 import com.millennialmedia.InlineAd;
 import com.millennialmedia.InlineAd.AdSize;
 import com.millennialmedia.MMException;
+import com.mopub.common.MoPub;
+import com.mopub.common.SdkConfiguration;
+import com.mopub.common.SdkInitializationListener;
 import com.mopub.mobileads.MoPubErrorCode;
 import com.mopub.mobileads.MoPubView;
 import com.mopub.mobileads.MoPubView.BannerAdListener;
@@ -36,6 +39,15 @@ public class SuperAuctionMRECMoPubActivity extends Activity implements BannerAdL
         reloadButton = findViewById(R.id.reload_sa_mrec);
         loadButton.setEnabled(false);
         reloadButton.setEnabled(false);
+
+        SdkConfiguration sdkConfiguration = new SdkConfiguration.Builder(ADUNIT_ID).build();
+        MoPub.initializeSdk(this, sdkConfiguration, new SdkInitializationListener() {
+            @Override
+            public void onInitializationFinished() {
+               /* MoPub SDK initialized.
+               Check if you should show the consent dialog here, and make your ad requests. */
+            }
+        });
 
         moPubView = findViewById(R.id.mrec_container_sa);
         moPubView.setBannerAdListener(this);
