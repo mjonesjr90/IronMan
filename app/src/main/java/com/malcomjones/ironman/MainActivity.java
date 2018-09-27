@@ -1,9 +1,13 @@
 package com.malcomjones.ironman;
 
+import android.Manifest;
 import android.app.DialogFragment;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
@@ -27,11 +31,20 @@ public class MainActivity extends AppCompatActivity {
     private static final double LAT = 51.5287718;
     private static final double LNG = -0.2430682;
     private static final float ACCURACY = 3.0f;
+    private static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        Log.d(TAG, "Check if Location allowed");
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // Permission is not granted
+            Log.d(TAG, "Location not allowed");
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, MY_PERMISSIONS_REQUEST_LOCATION);
+
+        }
 
         // Enable debug logging
         MMLog.setLogLevel(Log.VERBOSE);

@@ -21,7 +21,7 @@ import com.millennialmedia.MMException;
 public class SuperAuctionBannerActivity extends Activity{
 
     private static final String TAG = "SABasicBannerActivity";
-    private static final String PLACEMENT_ID = "banner_homescreen_sa";
+    private static final String PLACEMENT_ID = "sa_banner";
     private View loadButton;
     private View reloadButton;
     private InlineAd inlineAd;
